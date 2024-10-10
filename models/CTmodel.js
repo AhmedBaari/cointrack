@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 // MongoDB connection
-mongoose.connect("mongodb://localhost:27017/CoinTrackDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  process.env.MONGODBURL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 // Schema
 const CTSchema = new mongoose.Schema({
