@@ -68,3 +68,64 @@ const fetchCryptoData = async () => {
 
 // Run it every 2 hours
 cron.schedule('0 */2 * * *', fetchCryptoData);
+
+
+/* /STATS method: GET THE LATEST DATA */
+app.get("/stats", async (req, res) => {
+  const { coin } = req.query; // Get coin name
+
+  // Get the latest record
+  const Record = await Crypto.findOne({ coin }).sort(
+    { timestamp: -1 }); // sort timestamp in descending order
+
+  if (Record) {
+    // Send the response with the data
+    res.json({
+      price: Record.price,
+      marketCap: Record.marketCap,
+      "24hChange": Record.change24h,
+    });
+
+  } else {
+    res.status(404).send("Data not found");
+  }
+});
+
+/* /DEVIATION method: GET THE STANDARD DEVIATION OF (upto) THE LAST 100 PRICES */
+app.get("/deviation", async (req, res) => {
+
+  const { coin } = req.query;
+
+  // Getting the last 100 records
+  const records = await CT.find({ coin })
+    .sort({ timestamp: -1 })
+    .limit(100);
+  
+  
+  if (records.length > 0) {
+    // Getting the price for each record
+    const prices = records.map((record) => record.price);
+
+    // Mean of all of these prices
+    const mean = prices.reduce((a, b) => a + b, 0) / prices.length;
+
+    // Calculating Variance (σ^2)
+    const variance =
+      prices.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / prices.length;
+    
+    // Standard Deviation (σ) (root of variance)
+    const deviation = Math.sqrt(variance);
+
+    // response 
+    res.json({ deviation });
+  } else {
+    res.status(404).send("Data not found");
+  }
+});
+
+
+
+// SERVER LISTENER ------------------------
+app.listen(PORT, () => {
+  console.log(`server is listening in ${PORT}`);
+});
