@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
+
 
 // MongoDB connection
-mongoose.connect(
-  process.env.MONGODBURL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect(process.env.MONGODBURL);
 
 // Schema
 const CTSchema = new mongoose.Schema({

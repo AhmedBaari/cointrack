@@ -11,15 +11,17 @@ const CT = require('./models/CTmodel');
 // import routes
 const statsRoute = require('./routes/stats');
 const deviationRoute = require('./routes/deviation');
+const helloRoute = require('./routes/root');
 
 // import cron job
 const fetchCryptoData = require('./jobs/fetchCryptoData');
 
 
+
 app.use(express.json());
 app.use('/stats', statsRoute);  
 app.use('/deviation', deviationRoute);
-
+app.use('', helloRoute);
 
 
 
