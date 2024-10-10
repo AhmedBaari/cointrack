@@ -1,67 +1,102 @@
-## Assignment Objective
 
-Develop a server side application using Node.js and MongoDB and complete the following tasks.
+# CoinTrack
 
-## Task 1
+## Introduction
 
-- Implement a background job that will fetch the current price in USD, market cap in USD and 24 hour change of 3 cryptocurrencies: Bitcoin, Matic, and Ethereum and store it in a database. This job should run once every 2 hours.
-- The above details about a cryptocurrency can be fetched using an API from CoinGecko. You also have to search for the relevant API from their documentation: https://docs.coingecko.com/v3.0.1/reference/introduction.
-- Hint: Coingecko IDs for the above listed coins are `bitcoin`, `matic-network` and `ethereum`.
+CoinTrack is a server-side application developed using Node.js and MongoDB. The app fetches and stores cryptocurrency data and provides APIs to get the latest data and standard deviation for these cryptocurrencies.
 
-## Task 2
+## Technologies Used
 
-- Implement an API `/stats`, that will return the latest data about the requested cryptocurrency.
-- Query params:
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Axios
+- Node-cron
 
-```jsx
-{
-	coin: `bitcoin` // Could be one of the above 3 coins
-}
+## Setup Instructions
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd cointrack
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   Create a `.env` file in the root directory and add the necessary environment variables.
+
+4. **Start MongoDB**:
+   Ensure MongoDB is running locally or provide a connection string to a remote MongoDB instance.
+
+## Running the Application
+
+1. **Start the server**:
+   ```bash
+   npm start
+   ```
+
+   The server will start on the port specified in the environment variables or default to `3000`.
+
+## API Endpoints
+
+### `/stats`
+
+- **Description**: Latest data about the specific cryptocurrency.
+- **Method**: GET
+- **Query Params**:
+  ```json
+  {
+    "coin": "bitcoin" // 'bitcoin', 'matic-network', 'ethereum'
+  }
+  ```
+- **Sample Response**:
+  ```json
+  {
+    "price": 40000,
+    "marketCap": 800000000,
+    "24hChange": 3.4
+  }
+  ```
+
+### `/deviation`
+
+- **Description**: Standard deviation of the price of the cryptocurrency for upto the last 100 records.
+- **Method**: GET
+- **Query Params**:
+  ```json
+  {
+    "coin": "bitcoin" // 'bitcoin', 'matic-network', 'ethereum'
+  }
+  ```
+- **Sample Response**:
+  ```json
+  {
+    "deviation": 4082.48
+  }
+  ```
+
+## Background Job
+
+The server fetchs the current price (USD), market cap (USD), and 24-hour change of 3 cryptocurrencies: `Bitcoin`, `Matic`, and `Ethereum`.  
+This job runs once every 2 hours and stores the data in the MongoDB database.
+
+## Deployment
+
+This was deployed to Microsoft Azure
+URL:
+```
+https://cointrack.azurewebsites.net/
 ```
 
-- Sample Response:
+### GitHub Actions Workflow
 
-```jsx
-{
-	price: 40000,
-	marketCap: 800000000,
-	"24hChange": 3.4
-}
-```
+The `.github/workflows/main_cointrack.yml` file contains CI/CD pipeline config to build and deploy to the above project.
 
-## Task 3
+## Database
 
-- Implement an API, `/deviation`, that will return the standard deviation of the price of the requested cryptocurrency for the last 100 records stored by the background service in the database.
-- For example, consider the database only has 3 records for `bitcoin`, each with a price of 40000, 45000, 50000 respectively. Then the result should return 4082.48.
-- Query params:
-
-```jsx
-{
-	coin: `bitcoin` // Could be one of the above 3 coins
-}
-```
-
-- Sample Response:
-
-```jsx
-{
-	deviation: 4082.48
-}
-```
-
-**Optional Tasks:-**
-
-1. Deploy your database using MongoDB Atlas or other similar tools.
-2. Deploy your backend using platforms like Heroku or any cloud platform like AWS, GCP or Azure and expose the API to the public.
-
-**Please host your code on GitHub.**
-
-**Notes:-**
-
-1. Think of this assignment as a production grade project. Using best practices, writing clean code etc. will fetch you additional points.
-2. Do think well about how you want to design your database schemas.
-3. We care about the usage of version control and the way you structure(and name) your commits!
-
-## Assignment Submission
-
-- Once you’re done with the tasks, please submit the links in this form: https://forms.gle/tWmaJ2NcdiZo5qQs5.
+The database is hosted on MongoDB Atlas.
