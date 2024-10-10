@@ -40,7 +40,10 @@ CoinTrack is a server-side application developed using Node.js and MongoDB. The 
    npm start
    ```
 
-   The server will start on the port specified in the environment variables or default to `3000`.
+  The server will start on the port specified in the environment variables or default to `3000`.
+
+  The API endpoints can be easily tested by using Postman. Here's an example:
+  ![Stats of Bitcoin in Cointrack](./content/image.png)
 
 ## API Endpoints
 
